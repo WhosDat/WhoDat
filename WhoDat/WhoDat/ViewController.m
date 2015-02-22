@@ -14,9 +14,37 @@
 
 @implementation ViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
+    // Login View Controller Button
+    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/3-1, 30)];
+    loginButton.center = CGPointMake(self.view.frame.size.width/3, 290);
+    [loginButton setTitle:@"Login" forState:UIControlStateNormal];
+    [loginButton setBackgroundColor:[UIColor blackColor]];
+    [loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [loginButton addTarget:self action:@selector(loginButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:loginButton];
+    
+    // Signup View Controller Button
+    UIButton *signupButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/3-1, 30)];
+    signupButton.center = CGPointMake(2*self.view.frame.size.width/3, 290);
+    [signupButton setTitle:@"Signup" forState:UIControlStateNormal];
+    [signupButton setBackgroundColor:[UIColor blackColor]];
+    [signupButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [signupButton addTarget:self action:@selector(signupButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:signupButton];
+}
+
+-(void)loginButtonPressed
+{
+    [self performSegueWithIdentifier:@"showLoginViewController" sender:self];
+}
+
+-(void)signupButtonPressed
+{
+    [self performSegueWithIdentifier:@"showSignupViewController" sender:self];
 }
 
 - (void)didReceiveMemoryWarning {

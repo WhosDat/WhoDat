@@ -14,6 +14,8 @@
 		FF1181491A9968F600D0798E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF1181481A9968F600D0798E /* Images.xcassets */; };
 		FF11814C1A9968F600D0798E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FF11814A1A9968F600D0798E /* LaunchScreen.xib */; };
 		FF1181581A9968F700D0798E /* WhoDatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1181571A9968F700D0798E /* WhoDatTests.m */; };
+		FF5FBC8F1A9969F300F2BEB6 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5FBC8E1A9969F300F2BEB6 /* LoginViewController.m */; };
+		FF5FBC921A996B5700F2BEB6 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5FBC911A996B5700F2BEB6 /* SignupViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,10 @@
 		FF1181511A9968F700D0798E /* WhoDatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhoDatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF1181561A9968F700D0798E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FF1181571A9968F700D0798E /* WhoDatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhoDatTests.m; sourceTree = "<group>"; };
+		FF5FBC8D1A9969F300F2BEB6 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		FF5FBC8E1A9969F300F2BEB6 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		FF5FBC901A996B5700F2BEB6 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
+		FF5FBC911A996B5700F2BEB6 /* SignupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignupViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +91,10 @@
 				FF1181401A9968F600D0798E /* AppDelegate.m */,
 				FF1181421A9968F600D0798E /* ViewController.h */,
 				FF1181431A9968F600D0798E /* ViewController.m */,
+				FF5FBC8D1A9969F300F2BEB6 /* LoginViewController.h */,
+				FF5FBC8E1A9969F300F2BEB6 /* LoginViewController.m */,
+				FF5FBC901A996B5700F2BEB6 /* SignupViewController.h */,
+				FF5FBC911A996B5700F2BEB6 /* SignupViewController.m */,
 				FF1181451A9968F600D0798E /* Main.storyboard */,
 				FF1181481A9968F600D0798E /* Images.xcassets */,
 				FF11814A1A9968F600D0798E /* LaunchScreen.xib */,
@@ -219,9 +229,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF5FBC8F1A9969F300F2BEB6 /* LoginViewController.m in Sources */,
 				FF1181441A9968F600D0798E /* ViewController.m in Sources */,
 				FF1181411A9968F600D0798E /* AppDelegate.m in Sources */,
 				FF11813E1A9968F600D0798E /* main.m in Sources */,
+				FF5FBC921A996B5700F2BEB6 /* SignupViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -412,6 +424,7 @@
 				FF11815D1A9968F700D0798E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FF11815E1A9968F700D0798E /* Build configuration list for PBXNativeTarget "WhoDatTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +433,7 @@
 				FF1181601A9968F700D0798E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
