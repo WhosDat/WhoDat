@@ -35,6 +35,10 @@
     [signupButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [signupButton addTarget:self action:@selector(signupButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:signupButton];
+    
+    UILabel *jason = [[UILabel alloc] initWithFrame:CGRectMake(0, 500, 100, 40)];
+    jason.text = @"Jason";
+    [self.view addSubview:jason];
 }
 
 -(void)loginButtonPressed
