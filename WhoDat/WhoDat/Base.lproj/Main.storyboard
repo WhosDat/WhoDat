@@ -40,10 +40,67 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <segue destination="aRj-q6-pbu" kind="show" identifier="showProfileViewController" id="G5k-Fk-6pq"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lEV-yG-L7L" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1876" y="-39"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="iFb-jK-XXf">
+            <objects>
+                <viewController id="H2O-7a-U9P" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="pMx-GT-hYw"/>
+                        <viewControllerLayoutGuide type="bottom" id="y41-d6-fM4"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="PYx-Sm-2aA">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hzG-5X-zWo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2703" y="-1156"/>
+        </scene>
+        <!--News Feed View Controller-->
+        <scene sceneID="kiI-g7-1aW">
+            <objects>
+                <viewController id="ewj-pG-0nU" customClass="NewsFeedViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="zYO-iv-4nX"/>
+                        <viewControllerLayoutGuide type="bottom" id="Lvm-UN-jxS"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Hdo-Uf-3ei">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bbl-3i-PoK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2703" y="-419"/>
+        </scene>
+        <!--Profile View Controller-->
+        <scene sceneID="8Iu-3o-bTF">
+            <objects>
+                <viewController id="aRj-q6-pbu" customClass="ProfileViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vay-f8-RMF"/>
+                        <viewControllerLayoutGuide type="bottom" id="NXh-L9-fg3"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Hxc-j5-UI2">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jpD-OQ-5F0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2703" y="265"/>
         </scene>
         <!--Signup View Controller-->
         <scene sceneID="tlc-S0-bQc">

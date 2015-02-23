@@ -17,6 +17,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     // Create title
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
     titleLabel.center = CGPointMake(self.view.frame.size.width/2, 130);
@@ -59,6 +60,7 @@
 -(void)loginButtonPressed
 {
     // Login the user
+    [self performSegueWithIdentifier:@"showProfileViewController" sender:self];
 }
 
 -(void)cancelButtonPressed
