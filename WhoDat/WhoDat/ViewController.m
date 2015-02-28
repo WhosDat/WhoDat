@@ -18,42 +18,38 @@
 {
     [super viewDidLoad];
     
+//    self.view.backgroundColor = [UIColor colorWithRed:0 green:.31 blue:.92 alpha:1];
+    
+    UIImageView *iconImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon"]];
+    iconImageView.frame = CGRectMake(0, 0, self.view.frame.size.width-90, self.view.frame.size.width-90);
+    iconImageView.center = CGPointMake(self.view.frame.size.width/2, 200);
+    [self.view addSubview:iconImageView];
+    
     // Login View Controller Button
-    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/3-1, 30)];
-    loginButton.center = CGPointMake(self.view.frame.size.width/3, 290);
+    UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height/2, self.view.frame.size.width, 50)];
     [loginButton setTitle:@"Login" forState:UIControlStateNormal];
-    [loginButton setBackgroundColor:[UIColor blackColor]];
+    [loginButton setBackgroundColor:[UIColor colorWithRed:.34 green:.76 blue:.49 alpha:1]];
     [loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [loginButton addTarget:self action:@selector(loginButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [loginButton addTarget:self action:@selector(loginButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:loginButton];
     
     // Signup View Controller Button
-    UIButton *signupButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/3-1, 30)];
-    signupButton.center = CGPointMake(2*self.view.frame.size.width/3, 290);
+    UIButton *signupButton = [[UIButton alloc] initWithFrame:CGRectMake(0, loginButton.frame.origin.y+50, self.view.frame.size.width, 50)];
     [signupButton setTitle:@"Signup" forState:UIControlStateNormal];
-    [signupButton setBackgroundColor:[UIColor blackColor]];
+    [signupButton setBackgroundColor:[UIColor colorWithRed:.76 green:.29 blue:.51 alpha:1]];
     [signupButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [signupButton addTarget:self action:@selector(signupButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [signupButton addTarget:self action:@selector(signupButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:signupButton];
-    
-    UILabel *jason = [[UILabel alloc] initWithFrame:CGRectMake(0, 500, 100, 40)];
-    jason.text = @"Jason";
-    [self.view addSubview:jason];
 }
 
--(void)loginButtonPressed
+-(IBAction)loginButtonPressed:(id)sender
 {
     [self performSegueWithIdentifier:@"showLoginViewController" sender:self];
 }
 
--(void)signupButtonPressed
+-(IBAction)signupButtonPressed:(id)sender
 {
     [self performSegueWithIdentifier:@"showSignupViewController" sender:self];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

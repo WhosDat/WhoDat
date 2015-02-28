@@ -10,6 +10,10 @@
 
 @interface SignupViewController ()
 
+@property (nonatomic) UITextField *usernameField;
+@property (nonatomic) UITextField *passwordField;
+@property (nonatomic) UITextField *emailField;
+
 @end
 
 @implementation SignupViewController
@@ -19,22 +23,23 @@
     [super viewDidLoad];
     
     // Create username field
-    UITextField *usernameField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-20, 40)];
-    usernameField.center = CGPointMake(self.view.frame.size.width/2, 200);
-    usernameField.placeholder = @"Username";
-    [self.view addSubview:usernameField];
+    self.usernameField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-20, 40)];
+    self.usernameField.center = CGPointMake(self.view.frame.size.width/2, 200);
+    self.usernameField.placeholder = @"Username";
+    [self.view addSubview:self.usernameField];
     
     // Create password field
-    UITextField *passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-20, 40)];
-    passwordField.center = CGPointMake(self.view.frame.size.width/2, 240);
-    passwordField.placeholder = @"Password";
-    [self.view addSubview:passwordField];
+    self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-20, 40)];
+    self.passwordField.center = CGPointMake(self.view.frame.size.width/2, 240);
+    self.passwordField.placeholder = @"Password";
+    self.passwordField.secureTextEntry = YES;
+    [self.view addSubview:self.passwordField];
     
     // Create email field
-    UITextField *emailField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-20, 40)];
-    emailField.center = CGPointMake(self.view.frame.size.width/2, 280);
-    emailField.placeholder = @"Email";
-    [self.view addSubview:emailField];
+    self.emailField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-20, 40)];
+    self.emailField.center = CGPointMake(self.view.frame.size.width/2, 280);
+    self.emailField.placeholder = @"Email";
+    [self.view addSubview:self.emailField];
     
     // Create cancel button
     UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/3-1, 30)];
@@ -42,7 +47,7 @@
     [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [cancelButton setBackgroundColor:[UIColor blackColor]];
     [cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [cancelButton addTarget:self action:@selector(cancelButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [cancelButton addTarget:self action:@selector(cancelButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancelButton];
     
     // Create signup button
@@ -51,25 +56,34 @@
     [signupButton setTitle:@"Sign Up" forState:UIControlStateNormal];
     [signupButton setBackgroundColor:[UIColor blackColor]];
     [signupButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [signupButton addTarget:self action:@selector(signupButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [signupButton addTarget:self action:@selector(signupButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:signupButton];
 }
 
--(void)signupButtonPressed
+-(IBAction)signupButtonPressed:(id)sender
 {
-    // Signup user
-    // Log in the user
+    PFUser *user = [PFUser user];
+    user.username = self.usernameField.text;
+    user.password = self.passwordField.text;
+    user.email = self.emailField.text;
+    user[@"points"] = @"0";
+    
+    [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            // Hooray! Let them use the app now.
+            [self performSegueWithIdentifier:@"userLoggedIn" sender:self];
+        } else {
+            NSString *errorString = [error userInfo][@"error"];
+            // Show the errorString somewhere and let the user try again.
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh!" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+        }
+    }];
 }
 
--(void)cancelButtonPressed
+-(IBAction)cancelButtonPressed:(id)sender
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

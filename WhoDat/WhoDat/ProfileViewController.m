@@ -11,6 +11,10 @@
 @interface ProfileViewController ()
 
 @property (nonatomic) UITableView *tableView;
+@property (nonatomic) NSArray *complimentsArray;
+@property (nonatomic) NSDictionary *complimentsDictionary;
+@property (nonatomic) NSString *points;
+@property (nonatomic) PFRelation *pointsRelation;
 
 @end
 
@@ -21,6 +25,11 @@
     
     [self.navigationController setNavigationBarHidden:YES];
     
+    [self.view endEditing:YES];
+    
+    [self getMessages];
+    [self queryPoints];
+    
     [self createProfile];
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 210, self.view.frame.size.width, self.view.frame.size.height-210)];
@@ -29,11 +38,6 @@
     [self.view addSubview:self.tableView];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-     
 #pragma mark - Profile Setup
 
 -(void)createProfile
@@ -46,36 +50,76 @@
     
     // User's username
     UILabel *username = [[UILabel alloc] initWithFrame:CGRectMake(180, 45, 150, 40)];
-    username.text = [NSString stringWithFormat:@"Alan Au"];
+    username.text = [PFUser currentUser].username;
     username.textColor = [UIColor blackColor];
-//    username.backgroundColor = [UIColor greenColor];
     username.font = [UIFont fontWithName:@"Times" size:28];
     [self.view addSubview:username];
     
     // User Points
+    // Query # of points for user
     UILabel *points = [[UILabel alloc] initWithFrame:CGRectMake(180, 90, 150, 30)];
-    points.text =[NSString stringWithFormat:@"Points: 10000"];
+    points.text =[NSString stringWithFormat:@"Points: %@", self.points];
     points.textColor = [UIColor blackColor];
-//    points.backgroundColor = [UIColor greenColor];
     points.font = [UIFont fontWithName:@"Times" size:16];
     [self.view addSubview:points];
     
-    // Read Message Button
-    UIButton *read = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width/2)-80, 170, 70, 40)];
-    [read setTitle:@"Read" forState:UIControlStateNormal];
-    read.titleLabel.font = [UIFont fontWithName:@"Times" size:22];
-//    read.backgroundColor = [UIColor greenColor];
-    [read setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//    [read addTarget:self action:@selector(<#selector#>) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:read];
+    // Friends Button
+    UIButton *friends = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
+    friends.center = CGPointMake(self.view.frame.size.width/2, 180);
+    [friends setTitle:@"Friends" forState:UIControlStateNormal];
+    [friends setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [friends setBackgroundColor:[UIColor colorWithRed:.76 green:.29 blue:.51 alpha:1]];
+    [friends addTarget:self action:@selector(friendsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:friends];
+}
+
+-(void)queryPoints
+{
+    PFQuery *userPoints = [PFQuery queryWithClassName:@"User"];
+    [userPoints whereKey:@"username" containsString:[PFUser currentUser].username];
+    userPoints.cachePolicy = kPFCachePolicyCacheThenNetwork;
     
-    // Unread Message Button
-    UIButton *unread = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width/2)+20, 170, 70, 40)];
-    [unread setTitle:@"Unread" forState:UIControlStateNormal];
-    unread.titleLabel.font = [UIFont fontWithName:@"Times" size:22];
-    [unread setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//    [unread addTarget:self action:@selector(<#selector#>) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:unread];
+    [userPoints getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        self.points = [object objectForKey:@"points"];
+    }];
+    
+//    self.pointsRelation = [[PFUser currentUser] objectForKey:@"pointsRelation"];
+//    
+//    PFQuery *pointsQuery = [self.pointsRelation query];
+//    [pointsQuery whereKeyExists:@"points"];
+//    [pointsQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+//        self.points = [object objectForKey:@"points"];
+//        NSLog(@"%@", self.points);
+//    }];
+}
+
+-(void)getMessages
+{
+    // Show Messages that have been read
+    PFQuery *compliments = [PFQuery queryWithClassName:@"Compliment"];
+    [compliments whereKeyExists:@"Message"];
+    [compliments whereKey:@"Receiver" equalTo:[PFUser currentUser].username];
+    [compliments orderByDescending:@"createdAt"];
+    compliments.cachePolicy = kPFCachePolicyCacheThenNetwork;
+
+    
+    [compliments findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if(!error){
+            self.complimentsArray = objects;
+            [self.tableView reloadData];
+        }
+        else{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Uh Oh!" message:@"We couldn't load your compliments, try again" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+        }
+    }];
+    
+    [self.tableView reloadData];
+}
+
+-(IBAction)friendsButtonPressed:(id)sender
+{
+    [self performSegueWithIdentifier:@"showFriendsViewController" sender:self];
 }
 
 #pragma mark - Table View
@@ -87,7 +131,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    if (self.complimentsArray != nil)
+        return self.complimentsArray.count;
+    else
+        return 1;
 }
 
 
@@ -102,15 +149,26 @@
     
     // Message
     UILabel *message = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.view.frame.size.width-20, 100)];
+    
+    if (self.complimentsArray != nil)
+        message.text = [NSString stringWithFormat:@"%@", [[self.complimentsArray objectAtIndex:indexPath.row] objectForKey:@"Message"]];
+    else
+        message.text = @"No Messages";
+    
     message.numberOfLines = 4;
     message.lineBreakMode = NSLineBreakByWordWrapping;
     message.textAlignment = NSTextAlignmentCenter;
-    message.font = [UIFont fontWithName:@"Freight Sans" size:14];
+    message.font = [UIFont fontWithName:@"Times" size:14];
     message.textColor = [UIColor blackColor];
-    message.text = [NSString stringWithFormat:@"You is sooooooo awesome, i love you and your swagginess. it's amazing. i want to marry you and have your kids. seriously, don't be scared. message me your number!"];
     [cell addSubview:message];
     
     return cell;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+
+    
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
