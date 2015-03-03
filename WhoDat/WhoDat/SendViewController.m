@@ -73,6 +73,7 @@
     [friendQuery orderByAscending:@"username"];
     [friendQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         self.friends = objects;
+        NSLog(@"%@", self.friends);
         [self.tableView reloadData];
     }];
 }

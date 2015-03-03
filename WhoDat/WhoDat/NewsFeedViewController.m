@@ -13,18 +13,20 @@
 @property (nonatomic) UITableView *tableView;
 @property (nonatomic) PFRelation *friendsRelation;
 @property (nonatomic) NSArray *friends;
+@property (nonatomic) NSMutableArray *friendsMutable;
 @property (nonatomic) NSArray *friendsCompliments;
 
 @end
 
 @implementation NewsFeedViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    [self.navigationController setNavigationBarHidden:YES];
+    self.friendsMutable = [[NSMutableArray alloc] init];
     
-//    [self loadFeed];
+    [self.navigationController setNavigationBarHidden:YES];
 
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     self.tableView.delegate = self;
@@ -32,20 +34,29 @@
     [self.view addSubview:self.tableView];
 }
 
--(void)loadFeed
+-(void)viewDidAppear:(BOOL)animated
 {
-    // Load friends
     [self loadFriends];
     
+    for (int i = 0; i < self.friends.count; i++)
+        [self.friendsMutable addObject:[[self.friends objectAtIndex:i] objectForKey:@"username"]];
+    
+    NSLog(@"%@", self.friendsMutable);
+    
+    if (self.friends != nil)
+        [self loadFeed];
+}
+
+-(void)loadFeed
+{
     // If friends have a compliment load their compliments
     // Show Messages that have been read
     PFQuery *compliments = [PFQuery queryWithClassName:@"Compliment"];
     [compliments whereKeyExists:@"Message"];
-    [compliments whereKey:@"Receiver" containedIn:self.friends];
+    [compliments whereKey:@"Receiver" containedIn:self.friendsMutable];
     [compliments orderByDescending:@"createdAt"];
     compliments.cachePolicy = kPFCachePolicyCacheThenNetwork;
-    
-    
+
     [compliments findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if(!error){
             self.friendsCompliments = objects;
@@ -63,10 +74,9 @@
     self.friendsRelation = [[PFUser currentUser] objectForKey:@"friendRelation"];
     
     PFQuery *friendQuery = [self.friendsRelation query];
-    [friendQuery orderByAscending:@"username"];
+//    [friendQuery whereKeyExists:@"username"];
     [friendQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         self.friends = objects;
-        [self.tableView reloadData];
     }];
 }
 
@@ -79,7 +89,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.friendsCompliments.count > 0)
+    if (self.friendsCompliments != nil)
         return self.friendsCompliments.count;
     else
         return 1;
