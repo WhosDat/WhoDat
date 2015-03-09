@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		92CB2E1D1AAE14FC00E1D578 /* GroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CB2E1C1AAE14FC00E1D578 /* GroupsViewController.m */; };
 		FF11813E1A9968F600D0798E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FF11813D1A9968F600D0798E /* main.m */; };
 		FF1181411A9968F600D0798E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1181401A9968F600D0798E /* AppDelegate.m */; };
 		FF1181441A9968F600D0798E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1181431A9968F600D0798E /* ViewController.m */; };
@@ -49,6 +50,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		92CB2E1B1AAE14FC00E1D578 /* GroupsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupsViewController.h; sourceTree = "<group>"; };
+		92CB2E1C1AAE14FC00E1D578 /* GroupsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsViewController.m; sourceTree = "<group>"; };
 		FF1181381A9968F500D0798E /* WhoDat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhoDat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF11813C1A9968F500D0798E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FF11813D1A9968F600D0798E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -156,6 +159,8 @@
 				FF5FBC8E1A9969F300F2BEB6 /* LoginViewController.m */,
 				FF5FBC901A996B5700F2BEB6 /* SignupViewController.h */,
 				FF5FBC911A996B5700F2BEB6 /* SignupViewController.m */,
+				92CB2E1B1AAE14FC00E1D578 /* GroupsViewController.h */,
+				92CB2E1C1AAE14FC00E1D578 /* GroupsViewController.m */,
 				FF5FBCC51A9AB37200F2BEB6 /* SendViewController.h */,
 				FF5FBCC61A9AB37200F2BEB6 /* SendViewController.m */,
 				FF5FBCCE1A9ABACF00F2BEB6 /* NewsFeedViewController.h */,
@@ -327,6 +332,7 @@
 				FF28EFBC1AA19015001A4832 /* FriendsViewController.m in Sources */,
 				FF5FBCD01A9ABACF00F2BEB6 /* NewsFeedViewController.m in Sources */,
 				FF1181441A9968F600D0798E /* ViewController.m in Sources */,
+				92CB2E1D1AAE14FC00E1D578 /* GroupsViewController.m in Sources */,
 				FF1181411A9968F600D0798E /* AppDelegate.m in Sources */,
 				FF11813E1A9968F600D0798E /* main.m in Sources */,
 				FF5FBC921A996B5700F2BEB6 /* SignupViewController.m in Sources */,
