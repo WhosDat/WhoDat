@@ -71,6 +71,7 @@
 -(void)loadUsers
 {
     PFQuery *showUsers = [PFUser query];
+    [showUsers whereKey:@"username" notEqualTo:[PFUser currentUser].username];
     [showUsers orderByAscending:@"username"];
     showUsers.cachePolicy = kPFCachePolicyCacheThenNetwork;
     [showUsers findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {

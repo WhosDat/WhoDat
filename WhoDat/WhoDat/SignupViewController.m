@@ -24,26 +24,26 @@
     
     // Create username field
     self.usernameField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-20, 40)];
-    self.usernameField.center = CGPointMake(self.view.frame.size.width/2, 200);
+    self.usernameField.center = CGPointMake(self.view.frame.size.width/2, 100);
     self.usernameField.placeholder = @"Username";
     [self.view addSubview:self.usernameField];
     
     // Create password field
     self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-20, 40)];
-    self.passwordField.center = CGPointMake(self.view.frame.size.width/2, 240);
+    self.passwordField.center = CGPointMake(self.view.frame.size.width/2, 140);
     self.passwordField.placeholder = @"Password";
     self.passwordField.secureTextEntry = YES;
     [self.view addSubview:self.passwordField];
     
     // Create email field
     self.emailField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width-20, 40)];
-    self.emailField.center = CGPointMake(self.view.frame.size.width/2, 280);
+    self.emailField.center = CGPointMake(self.view.frame.size.width/2, 180);
     self.emailField.placeholder = @"Email";
     [self.view addSubview:self.emailField];
     
     // Create cancel button
     UIButton *cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/3-1, 30)];
-    cancelButton.center = CGPointMake(2*self.view.frame.size.width/3, 360);
+    cancelButton.center = CGPointMake(2*self.view.frame.size.width/3, 260);
     [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [cancelButton setBackgroundColor:[UIColor blackColor]];
     [cancelButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -52,7 +52,7 @@
     
     // Create signup button
     UIButton *signupButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width/3-1, 30)];
-    signupButton.center = CGPointMake(self.view.frame.size.width/3, 360);
+    signupButton.center = CGPointMake(self.view.frame.size.width/3, 260);
     [signupButton setTitle:@"Sign Up" forState:UIControlStateNormal];
     [signupButton setBackgroundColor:[UIColor blackColor]];
     [signupButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -63,14 +63,28 @@
 -(IBAction)signupButtonPressed:(id)sender
 {
     PFUser *user = [PFUser user];
-    user.username = self.usernameField.text;
+    // Convert username to lowercase to be stored in backend
+    user.username = [self.usernameField.text lowercaseString];
     user.password = self.passwordField.text;
     user.email = self.emailField.text;
-    user[@"points"] = @"0";
     
     [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
-            // Hooray! Let them use the app now.
+            // Initialize with a default picture
+            UIImage *initialImage = [UIImage imageNamed:@"default"];
+            NSData *imageData = UIImageJPEGRepresentation(initialImage, 0.3);
+            PFFile *imageFile = [PFFile fileWithName:@"ProfilePicture.jpg" data:imageData];
+            
+            // Initialize with 0 points
+            PFObject *initial = [PFObject objectWithClassName:@"UserMisc"];
+            [initial setObject:@"0" forKey:@"Points"];
+            [initial setObject:[self.usernameField.text lowercaseString] forKey:@"User"];
+            [initial setObject:imageFile forKey:@"ProfilePicture"];
+            [initial saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (error)
+                    NSLog(@"%@", error);
+            }];
+            
             [self performSegueWithIdentifier:@"userLoggedIn" sender:self];
         } else {
             NSString *errorString = [error userInfo][@"error"];

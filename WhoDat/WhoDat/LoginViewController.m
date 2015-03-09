@@ -65,7 +65,8 @@
 
 -(IBAction)loginButtonPressed:(id)sender
 {
-    [PFUser logInWithUsernameInBackground:self.usernameField.text password:self.passwordField.text
+    // Lowercase username (lowercase in backend)
+    [PFUser logInWithUsernameInBackground:[self.usernameField.text lowercaseString] password:self.passwordField.text
                                     block:^(PFUser *user, NSError *error) {
                                         if (user) {
                                             [self performSegueWithIdentifier:@"userLoggedIn" sender:self];

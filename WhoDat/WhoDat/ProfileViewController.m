@@ -15,12 +15,16 @@
 @property (nonatomic) NSDictionary *complimentsDictionary;
 @property (nonatomic) NSString *points;
 @property (nonatomic) PFRelation *pointsRelation;
+@property (nonatomic) UIImagePickerController *picker;
+@property (nonatomic) UIImageView *profilePicture;
+@property (nonatomic) UILabel *pointsLabel;
 
 @end
 
 @implementation ProfileViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     [self.navigationController setNavigationBarHidden:YES];
@@ -28,7 +32,7 @@
     [self.view endEditing:YES];
     
     [self getMessages];
-    [self queryPoints];
+    [self loadProfileImageAndPoints];
     
     [self createProfile];
     
@@ -38,59 +42,62 @@
     [self.view addSubview:self.tableView];
 }
 
+-(void)viewDidAppear:(BOOL)animated
+{
+    [self loadProfileImageAndPoints];
+}
+
 #pragma mark - Profile Setup
 
 -(void)createProfile
 {
     // Users's profile image
-    UIImageView *profileImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default"]];
-    profileImage.frame = CGRectMake(30, 30, 130, 130);
-    profileImage.layer.cornerRadius = 95;
-    [self.view addSubview:profileImage];
+    self.profilePicture = [[UIImageView alloc] init];
+    self.profilePicture.frame = CGRectMake(20, 20, 100, 100);
+    self.profilePicture.layer.cornerRadius = 95;
+    [self.view addSubview:self.profilePicture];
+    
+    // Update Picture button
+    UIButton *updatePicture = [[UIButton alloc] initWithFrame:CGRectMake(20, 20, 100, 100)];
+    updatePicture.backgroundColor = [UIColor clearColor];
+    [updatePicture addTarget:self action:@selector(updatePictureButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:updatePicture];
     
     // User's username
-    UILabel *username = [[UILabel alloc] initWithFrame:CGRectMake(180, 45, 150, 40)];
+    UILabel *username = [[UILabel alloc] initWithFrame:CGRectMake(130, 45, 150, 40)];
     username.text = [PFUser currentUser].username;
     username.textColor = [UIColor blackColor];
     username.font = [UIFont fontWithName:@"Times" size:28];
     [self.view addSubview:username];
     
     // User Points
-    // Query # of points for user
-    UILabel *points = [[UILabel alloc] initWithFrame:CGRectMake(180, 90, 150, 30)];
-    points.text =[NSString stringWithFormat:@"Points: %@", self.points];
-    points.textColor = [UIColor blackColor];
-    points.font = [UIFont fontWithName:@"Times" size:16];
-    [self.view addSubview:points];
+    self.pointsLabel = [[UILabel alloc] initWithFrame:CGRectMake(130, 80, 150, 30)];
+    self.pointsLabel.textColor = [UIColor blackColor];
+    self.pointsLabel.font = [UIFont fontWithName:@"Times" size:13];
+    [self.view addSubview:self.pointsLabel];
     
     // Friends Button
     UIButton *friends = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
-    friends.center = CGPointMake(self.view.frame.size.width/2, 180);
+    friends.center = CGPointMake(self.view.frame.size.width/2, 160);
     [friends setTitle:@"Friends" forState:UIControlStateNormal];
     [friends setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [friends setBackgroundColor:[UIColor colorWithRed:.76 green:.29 blue:.51 alpha:1]];
     [friends addTarget:self action:@selector(friendsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:friends];
+    
+    // Logout Button
+    UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-50, 20, 50, 30)];
+    [logout setTitle:@"Log Out" forState:UIControlStateNormal];
+    [logout setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    logout.titleLabel.font = [UIFont fontWithName:@"Times" size:10];
+    [logout addTarget:self action:@selector(logoutButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:logout];
 }
 
--(void)queryPoints
+-(IBAction)logoutButtonPressed:(id)sender
 {
-    PFQuery *userPoints = [PFQuery queryWithClassName:@"User"];
-    [userPoints whereKey:@"username" containsString:[PFUser currentUser].username];
-    userPoints.cachePolicy = kPFCachePolicyCacheThenNetwork;
-    
-    [userPoints getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        self.points = [object objectForKey:@"points"];
-    }];
-    
-//    self.pointsRelation = [[PFUser currentUser] objectForKey:@"pointsRelation"];
-//    
-//    PFQuery *pointsQuery = [self.pointsRelation query];
-//    [pointsQuery whereKeyExists:@"points"];
-//    [pointsQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-//        self.points = [object objectForKey:@"points"];
-//        NSLog(@"%@", self.points);
-//    }];
+    [PFUser logOut];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 -(void)getMessages
@@ -121,6 +128,72 @@
 {
     [self performSegueWithIdentifier:@"showFriendsViewController" sender:self];
 }
+
+#pragma mark - Profile Picture
+
+-(IBAction)updatePictureButtonPressed:(id)sender
+{
+    self.picker = [[UIImagePickerController alloc] init];
+    self.picker.delegate = self;
+    [self.picker setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
+    [self presentViewController:self.picker animated:YES completion:NULL];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    // Dismiss Controller
+    [self.picker dismissViewControllerAnimated:YES completion:NULL];
+
+    // Access the image from the info dictionary
+    UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+
+    //Upload Image to Parse
+    NSData *imageData = UIImageJPEGRepresentation(image, 0.3);
+    [self imageUpload:imageData];
+}
+
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self.picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+-(void)imageUpload:(id)sender
+{
+    PFFile *imageFile = [PFFile fileWithName:@"ProfilePicture.jpg" data:sender];
+    
+    PFQuery *profileImage = [PFQuery queryWithClassName:@"UserMisc"];
+    [profileImage whereKey:@"User" equalTo:[PFUser currentUser].username];
+    [profileImage getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if(!error){
+            [object setObject:imageFile forKey:@"ProfilePicture"];
+            [object saveInBackground];
+            [self loadProfileImageAndPoints];
+        }
+        else{
+            NSLog(@"%@", error);
+        }
+    }];
+}
+
+-(void)loadProfileImageAndPoints
+{
+    PFQuery *pictureQuery = [PFQuery queryWithClassName:@"UserMisc"];
+    [pictureQuery whereKey:@"User" equalTo:[PFUser currentUser].username];
+    pictureQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;
+    
+    // Run the query
+    [pictureQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (!error) {
+            PFFile *file = [object objectForKey:@"ProfilePicture"];
+            NSData *data = [file getData];
+            UIImage *profileImage = [UIImage imageWithData:data];
+            [self.profilePicture setImage:profileImage];
+            self.points = [object objectForKey:@"Points"];
+            self.pointsLabel.text = [NSString stringWithFormat:@"Points: %@", self.points];
+        }
+    }];
+}
+                   
 
 #pragma mark - Table View
 
@@ -167,7 +240,6 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
     
 }
 
