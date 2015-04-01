@@ -1,5 +1,5 @@
 //
-//  GroupsViewController.h
+//  CreateGroupViewController.h
 //  WhoDat
 //
 //  Created by Anthony Williams on 3/9/15.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface GroupsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface CreateGroupViewController : UIViewController
 
 @end

@@ -29,8 +29,8 @@
     
     self.friendsMutable = [[NSMutableArray alloc] init];
     
-    [self.navigationController setNavigationBarHidden:YES];
-
+    self.navigationItem.hidesBackButton = YES;
+    
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, self.view.frame.size.height-20)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;

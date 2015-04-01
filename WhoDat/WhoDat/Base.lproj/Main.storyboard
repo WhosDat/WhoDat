@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="5zq-pZ-gZ2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="5zq-pZ-gZ2">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
@@ -48,10 +48,28 @@
             </objects>
             <point key="canvasLocation" x="1876" y="-39"/>
         </scene>
+        <!--Create Group View Controller-->
+        <scene sceneID="hTz-Bu-GWb">
+            <objects>
+                <viewController id="JrJ-44-xuZ" customClass="CreateGroupViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7ui-AB-xZ9"/>
+                        <viewControllerLayoutGuide type="bottom" id="Xvw-ra-hyr"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2Cc-DY-V9F">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7Zl-Ro-qH0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3291" y="-1154"/>
+        </scene>
         <!--Send-->
         <scene sceneID="iFb-jK-XXf">
             <objects>
-                <viewController id="H2O-7a-U9P" customClass="SendViewController" sceneMemberID="viewController">
+                <viewController id="H2O-7a-U9P" customClass="GroupsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="pMx-GT-hYw"/>
                         <viewControllerLayoutGuide type="bottom" id="y41-d6-fM4"/>
@@ -61,11 +79,74 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Send" id="Eea-d6-kff"/>
+                    <tabBarItem key="tabBarItem" title="Send" id="A6m-8I-usO"/>
+                    <navigationItem key="navigationItem" id="fDz-st-oi7"/>
+                    <connections>
+                        <segue destination="8eO-9c-Ze7" kind="show" identifier="showGroupMembersViewController" id="yBJ-na-5QU"/>
+                        <segue destination="JrJ-44-xuZ" kind="presentation" identifier="showCreateGroupViewController" id="LpH-F5-fRY"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hzG-5X-zWo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3297" y="-458"/>
+            <point key="canvasLocation" x="3291" y="-470"/>
+        </scene>
+        <!--Group Members View Controller-->
+        <scene sceneID="WYZ-Da-SlJ">
+            <objects>
+                <viewController id="8eO-9c-Ze7" customClass="GroupMembersViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="4pH-5e-Gvr"/>
+                        <viewControllerLayoutGuide type="bottom" id="O48-fI-8Us"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ObY-4v-aN9">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="KYh-ry-8a4" kind="show" identifier="showSendViewController" id="eQ9-eD-c3j"/>
+                        <segue destination="0lb-op-kNi" kind="show" identifier="showAddGroupMembersViewController" id="css-xQ-TY5"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sts-cJ-SwF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4001" y="-472"/>
+        </scene>
+        <!--Add Group Members View Controller-->
+        <scene sceneID="i0z-MA-CtQ">
+            <objects>
+                <viewController id="0lb-op-kNi" customClass="AddGroupMembersViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="HrH-Oa-F7s"/>
+                        <viewControllerLayoutGuide type="bottom" id="Vnw-Vm-kQf"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Kl5-Hn-xBZ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZqX-v7-6ih" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4001" y="-1169"/>
+        </scene>
+        <!--Send View Controller-->
+        <scene sceneID="piJ-j8-4Yo">
+            <objects>
+                <viewController id="KYh-ry-8a4" customClass="SendViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lue-me-Zzw"/>
+                        <viewControllerLayoutGuide type="bottom" id="4e9-vR-j1e"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="agc-Xt-rd2">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aDi-Hh-4S8" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4693" y="-470"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Ze3-Wz-60r">
@@ -78,7 +159,7 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="H2O-7a-U9P" kind="relationship" relationship="viewControllers" id="ZXg-BX-7FD"/>
+                        <segue destination="H2O-7a-U9P" kind="relationship" relationship="viewControllers" id="H6S-QT-rNI"/>
                         <segue destination="ewj-pG-0nU" kind="relationship" relationship="viewControllers" id="u4g-Jw-tEE"/>
                         <segue destination="aRj-q6-pbu" kind="relationship" relationship="viewControllers" id="YFH-8h-xEW"/>
                     </connections>

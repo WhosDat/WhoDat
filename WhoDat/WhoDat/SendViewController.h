@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
 
-@interface SendViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, UISearchDisplayDelegate, UISearchControllerDelegate>
+@interface SendViewController : UIViewController <UISearchBarDelegate, UISearchDisplayDelegate, UISearchControllerDelegate>
+
+@property (nonatomic) NSString *sendingToUser;
 
 @end

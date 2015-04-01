@@ -15,6 +15,9 @@
 @property (nonatomic) NSArray *friendsArray;
 @property (nonatomic) NSMutableArray *friends;
 @property (nonatomic) PFRelation *friendsRelation;
+@property (nonatomic) UITextField *searchField;
+@property (nonatomic) NSString *resultingQuery;
+@property (nonatomic) PFUser *resultingUser;
 
 @end
 
@@ -24,16 +27,25 @@
 {
     [super viewDidLoad];
     
-    [self loadUsers];
-    [self loadFriends];
+    // Search Field
+    self.searchField = [[UITextField alloc] initWithFrame:CGRectMake(10, 60, self.view.frame.size.width-80, 50)];
+    self.searchField.placeholder = @"Search User";
+    self.searchField.backgroundColor = [UIColor orangeColor];
+    self.searchField.font = [UIFont systemFontOfSize:24];
+    self.searchField.autocorrectionType = NO;
+    self.searchField.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:self.searchField];
     
-    // Search Bar
-    UISearchBar *search = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 20, self.view.frame.size.width, 50)];
-    search.placeholder = @"Search";
-    [self.view addSubview:search];
+    // Search Button
+    UIButton *searchButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-60, 60, 50, 50)];
+    searchButton.backgroundColor = [UIColor blackColor];
+    [searchButton setTitle:@"S" forState:UIControlStateNormal];
+    [searchButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [searchButton addTarget:self action:@selector(searchQuery) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:searchButton];
     
     // Table
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 70, self.view.frame.size.width, self.view.frame.size.height-200)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 120, self.view.frame.size.width, self.view.frame.size.height-140)];
     self.tableView.separatorColor = [UIColor clearColor];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -55,37 +67,27 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
--(void)loadFriends
+-(void)searchQuery
 {
-    self.friendsRelation = [[PFUser currentUser] objectForKey:@"friendRelation"];
-    
-    PFQuery *friendQuery = [self.friendsRelation query];
-    [friendQuery orderByAscending:@"username"];
-    [friendQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        self.friendsArray = objects;
-        self.friends = [[NSMutableArray alloc] initWithArray:self.friendsArray];
-        [self.tableView reloadData];
-    }];
-}
-
--(void)loadUsers
-{
-    PFQuery *showUsers = [PFUser query];
-    [showUsers whereKey:@"username" notEqualTo:[PFUser currentUser].username];
-    [showUsers orderByAscending:@"username"];
-    showUsers.cachePolicy = kPFCachePolicyCacheThenNetwork;
-    [showUsers findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (error){
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
-        }
-        else{
-            self.allUsers = objects;
+    if (![[self.searchField.text lowercaseString] isEqualToString:[PFUser currentUser].username]){
+        PFQuery *searchUserQuery = [PFUser query];
+        [searchUserQuery whereKey:@"username" equalTo:[self.searchField.text lowercaseString]];
+        [searchUserQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            if (!error){
+                NSString *username = [object objectForKey:@"username"];
+                self.resultingQuery = username;
+                self.resultingUser = (PFUser *) object;
+                NSLog(@"%@", self.resultingUser);
+            }
+            else{
+                self.resultingQuery = [NSString stringWithFormat:@"User %@ not found", self.searchField.text];
+            }
             [self.tableView reloadData];
-        }
-    }];
+        }];
+    }
 }
 
-#pragma mark - UITableView Delegate
+#pragma mark - TableView DataSource
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -94,7 +96,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.allUsers.count;
+    return 1;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -111,20 +113,22 @@
     userProfileImage.frame = CGRectMake(5, 2.5, 30, 30);
     [cell addSubview:userProfileImage];
     
-    PFUser *user = [self.allUsers objectAtIndex:indexPath.row];
     
     // Username
     UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 2.5, 200, 30)];
-    usernameLabel.text = user.username;
+    if (self.resultingQuery != nil)
+        usernameLabel.text = [NSString stringWithFormat:@"%@", self.resultingQuery];
     usernameLabel.textColor = [UIColor blackColor];
     usernameLabel.font = [UIFont fontWithName:@"Times" size:18];
     [cell addSubview:usernameLabel];
     
-    if ([self isFriend:user]) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    }
-    else {
-        cell.accessoryType = UITableViewCellAccessoryNone;
+    if (self.resultingUser != nil){
+        if ([self isFriend:self.resultingUser]) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+        else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
     }
     
     return cell;

@@ -27,7 +27,7 @@
 {
     [super viewDidLoad];
     
-    [self.navigationController setNavigationBarHidden:YES];
+    self.navigationController.navigationBarHidden = YES;
     
     [self.view endEditing:YES];
     

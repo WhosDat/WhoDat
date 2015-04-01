@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		923634241AAE701900C43134 /* CreateGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 923634231AAE701900C43134 /* CreateGroupViewController.m */; };
+		923634271AAE702700C43134 /* GroupMembersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 923634261AAE702700C43134 /* GroupMembersViewController.m */; };
+		9246884F1AC7BA8D0045CAA3 /* AddGroupMembersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9246884E1AC7BA8D0045CAA3 /* AddGroupMembersViewController.m */; };
 		92CB2E1D1AAE14FC00E1D578 /* GroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 92CB2E1C1AAE14FC00E1D578 /* GroupsViewController.m */; };
 		FF11813E1A9968F600D0798E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FF11813D1A9968F600D0798E /* main.m */; };
 		FF1181411A9968F600D0798E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1181401A9968F600D0798E /* AppDelegate.m */; };
@@ -50,6 +53,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		923634221AAE701900C43134 /* CreateGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateGroupViewController.h; sourceTree = "<group>"; };
+		923634231AAE701900C43134 /* CreateGroupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateGroupViewController.m; sourceTree = "<group>"; };
+		923634251AAE702700C43134 /* GroupMembersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupMembersViewController.h; sourceTree = "<group>"; };
+		923634261AAE702700C43134 /* GroupMembersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupMembersViewController.m; sourceTree = "<group>"; };
+		9246884D1AC7BA8D0045CAA3 /* AddGroupMembersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddGroupMembersViewController.h; sourceTree = "<group>"; };
+		9246884E1AC7BA8D0045CAA3 /* AddGroupMembersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddGroupMembersViewController.m; sourceTree = "<group>"; };
 		92CB2E1B1AAE14FC00E1D578 /* GroupsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupsViewController.h; sourceTree = "<group>"; };
 		92CB2E1C1AAE14FC00E1D578 /* GroupsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupsViewController.m; sourceTree = "<group>"; };
 		FF1181381A9968F500D0798E /* WhoDat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhoDat.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,6 +170,12 @@
 				FF5FBC911A996B5700F2BEB6 /* SignupViewController.m */,
 				92CB2E1B1AAE14FC00E1D578 /* GroupsViewController.h */,
 				92CB2E1C1AAE14FC00E1D578 /* GroupsViewController.m */,
+				923634221AAE701900C43134 /* CreateGroupViewController.h */,
+				923634231AAE701900C43134 /* CreateGroupViewController.m */,
+				923634251AAE702700C43134 /* GroupMembersViewController.h */,
+				923634261AAE702700C43134 /* GroupMembersViewController.m */,
+				9246884D1AC7BA8D0045CAA3 /* AddGroupMembersViewController.h */,
+				9246884E1AC7BA8D0045CAA3 /* AddGroupMembersViewController.m */,
 				FF5FBCC51A9AB37200F2BEB6 /* SendViewController.h */,
 				FF5FBCC61A9AB37200F2BEB6 /* SendViewController.m */,
 				FF5FBCCE1A9ABACF00F2BEB6 /* NewsFeedViewController.h */,
@@ -275,6 +290,7 @@
 				TargetAttributes = {
 					FF1181371A9968F500D0798E = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = PC92889S4P;
 					};
 					FF1181501A9968F700D0798E = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -327,8 +343,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF5FBCC71A9AB37200F2BEB6 /* SendViewController.m in Sources */,
+				923634241AAE701900C43134 /* CreateGroupViewController.m in Sources */,
+				923634271AAE702700C43134 /* GroupMembersViewController.m in Sources */,
 				FF5FBCCD1A9AB3AA00F2BEB6 /* ProfileViewController.m in Sources */,
 				FF5FBC8F1A9969F300F2BEB6 /* LoginViewController.m in Sources */,
+				9246884F1AC7BA8D0045CAA3 /* AddGroupMembersViewController.m in Sources */,
 				FF28EFBC1AA19015001A4832 /* FriendsViewController.m in Sources */,
 				FF5FBCD01A9ABACF00F2BEB6 /* NewsFeedViewController.m in Sources */,
 				FF1181441A9968F600D0798E /* ViewController.m in Sources */,

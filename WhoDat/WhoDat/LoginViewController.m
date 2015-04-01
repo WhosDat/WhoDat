@@ -26,7 +26,7 @@
     // Create title
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 100)];
     titleLabel.center = CGPointMake(self.view.frame.size.width/2, 130);
-    titleLabel.text = @"WhoDat";
+    titleLabel.text = @"Expreso";
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.font = [UIFont fontWithName:@"Arial" size:40];
     [self.view addSubview:titleLabel];
