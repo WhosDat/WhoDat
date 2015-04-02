@@ -12,7 +12,7 @@
 
 @property (nonatomic) UICollectionView *collectionView;
 @property (nonatomic) UITableView *tableView;
-@property (nonatomic) NSArray *groupList;
+@property (nonatomic) NSMutableArray *groupList;
 @property (nonatomic) NSString *groupSelected;
 
 @end
@@ -65,7 +65,8 @@
     [groupQuery orderByAscending:@"Name"];
     [groupQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error){
-            self.groupList = objects;
+            NSArray *tempArray = objects;
+            self.groupList = [[NSMutableArray alloc] initWithArray:tempArray];
             [self.tableView reloadData];
         }
         else{
@@ -132,6 +133,17 @@
         self.groupSelected = [NSString stringWithFormat:@"%@", [[self.groupList objectAtIndex:indexPath.row-1] objectForKey:@"Name"]];
     
     [self performSegueWithIdentifier:@"showGroupMembersViewController" sender:self];
+}
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row != 0){
+        NSLog(@"%@", [[self.groupList objectAtIndex:indexPath.row-1] objectForKey:@"Name"]);
+        [self.groupList removeObjectAtIndex:indexPath.row-1];
+        [self.tableView reloadData];
+        
+        // Remove from backend
+    }
 }
 
 

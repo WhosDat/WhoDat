@@ -36,7 +36,7 @@
     
     [self createProfile];
     
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 210, self.view.frame.size.width, self.view.frame.size.height-210)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 160, self.view.frame.size.width, self.view.frame.size.height-210)];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
@@ -76,15 +76,6 @@
     self.pointsLabel.font = [UIFont fontWithName:@"Times" size:13];
     [self.view addSubview:self.pointsLabel];
     
-    // Friends Button
-    UIButton *friends = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
-    friends.center = CGPointMake(self.view.frame.size.width/2, 160);
-    [friends setTitle:@"Friends" forState:UIControlStateNormal];
-    [friends setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [friends setBackgroundColor:[UIColor colorWithRed:.76 green:.29 blue:.51 alpha:1]];
-    [friends addTarget:self action:@selector(friendsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:friends];
-    
     // Logout Button
     UIButton *logout = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-50, 20, 50, 30)];
     [logout setTitle:@"Log Out" forState:UIControlStateNormal];
@@ -122,11 +113,6 @@
     }];
     
     [self.tableView reloadData];
-}
-
--(IBAction)friendsButtonPressed:(id)sender
-{
-    [self performSegueWithIdentifier:@"showFriendsViewController" sender:self];
 }
 
 #pragma mark - Profile Picture
@@ -220,6 +206,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
+    cell.backgroundColor = [UIColor greenColor];
+    
     // Message
     UILabel *message = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, self.view.frame.size.width-20, 100)];
     
@@ -231,7 +219,7 @@
     message.numberOfLines = 4;
     message.lineBreakMode = NSLineBreakByWordWrapping;
     message.textAlignment = NSTextAlignmentCenter;
-    message.font = [UIFont fontWithName:@"Times" size:14];
+    message.font = [UIFont systemFontOfSize:18];
     message.textColor = [UIColor blackColor];
     [cell addSubview:message];
     
@@ -245,7 +233,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 120;
+    return 100;
 }
 
 @end

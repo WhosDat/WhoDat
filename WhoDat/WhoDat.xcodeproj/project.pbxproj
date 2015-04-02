@@ -18,7 +18,6 @@
 		FF1181491A9968F600D0798E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF1181481A9968F600D0798E /* Images.xcassets */; };
 		FF11814C1A9968F600D0798E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FF11814A1A9968F600D0798E /* LaunchScreen.xib */; };
 		FF1181581A9968F700D0798E /* WhoDatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FF1181571A9968F700D0798E /* WhoDatTests.m */; };
-		FF28EFBC1AA19015001A4832 /* FriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF28EFBB1AA19015001A4832 /* FriendsViewController.m */; };
 		FF5FBC8F1A9969F300F2BEB6 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5FBC8E1A9969F300F2BEB6 /* LoginViewController.m */; };
 		FF5FBC921A996B5700F2BEB6 /* SignupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5FBC911A996B5700F2BEB6 /* SignupViewController.m */; };
 		FF5FBCC71A9AB37200F2BEB6 /* SendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FF5FBCC61A9AB37200F2BEB6 /* SendViewController.m */; };
@@ -74,8 +73,6 @@
 		FF1181511A9968F700D0798E /* WhoDatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhoDatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF1181561A9968F700D0798E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FF1181571A9968F700D0798E /* WhoDatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhoDatTests.m; sourceTree = "<group>"; };
-		FF28EFBA1AA19015001A4832 /* FriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FriendsViewController.h; sourceTree = "<group>"; };
-		FF28EFBB1AA19015001A4832 /* FriendsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FriendsViewController.m; sourceTree = "<group>"; };
 		FF5FBC8D1A9969F300F2BEB6 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		FF5FBC8E1A9969F300F2BEB6 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		FF5FBC901A996B5700F2BEB6 /* SignupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignupViewController.h; sourceTree = "<group>"; };
@@ -182,8 +179,6 @@
 				FF5FBCCF1A9ABACF00F2BEB6 /* NewsFeedViewController.m */,
 				FF5FBCCB1A9AB3AA00F2BEB6 /* ProfileViewController.h */,
 				FF5FBCCC1A9AB3AA00F2BEB6 /* ProfileViewController.m */,
-				FF28EFBA1AA19015001A4832 /* FriendsViewController.h */,
-				FF28EFBB1AA19015001A4832 /* FriendsViewController.m */,
 				FF1181451A9968F600D0798E /* Main.storyboard */,
 				FF1181481A9968F600D0798E /* Images.xcassets */,
 				FF11814A1A9968F600D0798E /* LaunchScreen.xib */,
@@ -348,7 +343,6 @@
 				FF5FBCCD1A9AB3AA00F2BEB6 /* ProfileViewController.m in Sources */,
 				FF5FBC8F1A9969F300F2BEB6 /* LoginViewController.m in Sources */,
 				9246884F1AC7BA8D0045CAA3 /* AddGroupMembersViewController.m in Sources */,
-				FF28EFBC1AA19015001A4832 /* FriendsViewController.m in Sources */,
 				FF5FBCD01A9ABACF00F2BEB6 /* NewsFeedViewController.m in Sources */,
 				FF1181441A9968F600D0798E /* ViewController.m in Sources */,
 				92CB2E1D1AAE14FC00E1D578 /* GroupsViewController.m in Sources */,

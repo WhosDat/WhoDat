@@ -11,15 +11,11 @@
 @interface AddGroupMembersViewController ()
 
 @property (nonatomic) UITableView *tableView;
-@property (nonatomic) NSArray *allUsers;
-@property (nonatomic) NSArray *friendsArray;
-@property (nonatomic) NSMutableArray *friends;
 @property (nonatomic) PFRelation *friendsRelation;
-@property (nonatomic) NSArray *membersArray;
-@property (nonatomic) NSMutableArray *members;
-@property (nonatomic) NSMutableArray *membersToAdd;
 @property (nonatomic) UITextField *searchField;
 @property (nonatomic) NSString *resultingQuery;
+@property (nonatomic) PFUser *resultingUser;
+@property (nonatomic) NSArray *members;
 
 @end
 
@@ -45,40 +41,34 @@
     [doneButton addTarget:self action:@selector(cancelButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:doneButton];
     
+    // Search Field
+    self.searchField = [[UITextField alloc] initWithFrame:CGRectMake(5, 100, self.view.frame.size.width-65, 50)];
+    self.searchField.placeholder = @"Search User";
+    self.searchField.backgroundColor = [UIColor whiteColor];
+    self.searchField.font = [UIFont systemFontOfSize:24];
+    self.searchField.autocorrectionType = NO;
+    self.searchField.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:self.searchField];
+    
+    // Search Button
+    UIButton *searchButton = [[UIButton alloc] initWithFrame:CGRectMake(self.view.frame.size.width-55, 100, 50, 50)];
+    searchButton.backgroundColor = [UIColor blackColor];
+    [searchButton setTitle:@"S" forState:UIControlStateNormal];
+    [searchButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [searchButton addTarget:self action:@selector(searchQuery) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:searchButton];
+    
     // Table for all users
-    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 160, self.view.frame.size.width, self.view.frame.size.height-160)];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 150, self.view.frame.size.width, self.view.frame.size.height-160)];
     self.tableView.separatorColor = [UIColor clearColor];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.view addSubview:self.tableView];
     
-    
-    [self loadUsers];
-    
     if ([self.groupName isEqualToString:@"Friends"])
         [self loadFriends];
-    
-    
-    self.membersToAdd = [[NSMutableArray alloc] init];
-}
-
--(void)viewWillDisappear:(BOOL)animated
-{
-    if (![self.groupName isEqualToString:@"Friends"]){
-        NSArray *tempArray = [[NSArray alloc] initWithObjects:[PFUser currentUser].username, nil];
-        
-        PFQuery *groupQuery = [PFQuery queryWithClassName:@"Group"];
-        [groupQuery whereKey:@"Name" equalTo:self.groupName];
-        [groupQuery whereKey:@"Members" containsAllObjectsInArray:tempArray];
-        [groupQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-            NSArray *tempArray = [object objectForKey:@"Members"];
-            for (int i = 0; i < tempArray.count; i++)
-                [self.membersToAdd addObject:tempArray[i]];
-            NSLog(@"%@", self.membersToAdd);
-            object[@"Members"] = self.membersToAdd;
-            [object saveInBackground];
-        }];
-    }
+    else
+        [self loadGroup];
 }
 
 -(IBAction)cancelButtonPressed:(id)sender
@@ -93,42 +83,72 @@
     PFQuery *friendQuery = [self.friendsRelation query];
     [friendQuery orderByAscending:@"username"];
     [friendQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        self.friendsArray = objects;
-        self.friends = [[NSMutableArray alloc] initWithArray:self.friendsArray];
+        self.members = objects;
         [self.tableView reloadData];
+    }];
+}
+
+-(void)loadGroup
+{
+    NSArray *tempArray = [[NSArray alloc] initWithObjects:[PFUser currentUser].username, nil];
+    
+    PFQuery *groupQuery = [PFQuery queryWithClassName:@"Group"];
+    [groupQuery orderByAscending:@"Members"];
+    [groupQuery whereKey:@"Name" equalTo:self.groupName];
+    [groupQuery whereKey:@"Members" containsAllObjectsInArray:tempArray];
+    [groupQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        self.members = [object objectForKey:@"Members"];
     }];
 }
 
 -(void)searchQuery
 {
-    PFQuery *searchUserQuery = [PFUser query];
-    [searchUserQuery whereKey:@"username" equalTo:[self.searchField.text lowercaseString]];
-    [searchUserQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (!error){
-            NSString *username = [object objectForKey:@"username"];
-            self.resultingQuery = username;
-        }
-        else{
-            self.resultingQuery = [NSString stringWithFormat:@"User %@ not found", self.searchField.text];
-        }
-        [self.tableView reloadData];
+    if (![[self.searchField.text lowercaseString] isEqualToString:[PFUser currentUser].username]){
+        PFQuery *searchUserQuery = [PFUser query];
+        [searchUserQuery whereKey:@"username" equalTo:[self.searchField.text lowercaseString]];
+        [searchUserQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+            if (!error){
+                NSString *username = [object objectForKey:@"username"];
+                self.resultingQuery = username;
+                self.resultingUser = (PFUser *) object;
+            }
+            else{
+                self.resultingQuery = [NSString stringWithFormat:@"User %@ not found", self.searchField.text];
+            }
+            [self.tableView reloadData];
+        }];
+    }
+}
+
+-(void)addToGroup:(NSString *)username
+{
+    NSArray *tempArray = [[NSArray alloc] initWithObjects:[PFUser currentUser].username, nil];
+    
+    PFQuery *groupQuery = [PFQuery queryWithClassName:@"Group"];
+    [groupQuery whereKey:@"Name" equalTo:self.groupName];
+    [groupQuery whereKey:@"Members" containsAllObjectsInArray:tempArray];
+    [groupQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        self.members = [object objectForKey:@"Members"];
+        NSMutableArray *addMemberArray = [[NSMutableArray alloc] initWithArray:self.members];
+        [addMemberArray addObject:username];
+        object[@"Members"] = addMemberArray;
+        [object saveInBackground];
     }];
 }
 
--(void)loadUsers
+-(void)removeFromGroup:(NSString *)username
 {
-    PFQuery *showUsers = [PFUser query];
-    [showUsers whereKey:@"username" notEqualTo:[PFUser currentUser].username];
-    [showUsers orderByAscending:@"username"];
-    showUsers.cachePolicy = kPFCachePolicyCacheThenNetwork;
-    [showUsers findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (error){
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
-        }
-        else{
-            self.allUsers = objects;
-            [self.tableView reloadData];
-        }
+    NSArray *tempArray = [[NSArray alloc] initWithObjects:[PFUser currentUser].username, nil];
+
+    PFQuery *groupQuery = [PFQuery queryWithClassName:@"Group"];
+    [groupQuery whereKey:@"Name" equalTo:self.groupName];
+    [groupQuery whereKey:@"Members" containsAllObjectsInArray:tempArray];
+    [groupQuery getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        self.members = [object objectForKey:@"Members"];
+        NSMutableArray *memberArray = [[NSMutableArray alloc] initWithArray:self.members];
+        [memberArray removeObject:username];
+        object[@"Members"] = memberArray;
+        [object saveInBackground];
     }];
 }
 
@@ -141,7 +161,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.allUsers.count;
+    return 1;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -153,25 +173,33 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     
+    cell.backgroundColor = [UIColor whiteColor];
+    
     // Profile Picture
     UIImageView *userProfileImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"default"]];
     userProfileImage.frame = CGRectMake(5, 2.5, 30, 30);
     [cell addSubview:userProfileImage];
     
-    PFUser *user = [self.allUsers objectAtIndex:indexPath.row];
-    
     // Username
     UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(40, 2.5, 200, 30)];
-    usernameLabel.text = user.username;
+    if (self.resultingQuery != nil)
+        usernameLabel.text = [NSString stringWithFormat:@"%@", self.resultingQuery];
     usernameLabel.textColor = [UIColor blackColor];
-    usernameLabel.font = [UIFont fontWithName:@"Times" size:18];
+    usernameLabel.font = [UIFont systemFontOfSize:24];
     [cell addSubview:usernameLabel];
     
-    if ([self isFriend:user]) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    
+    if ([self.groupName isEqualToString:@"Friends"]){
+        if ([self isFriend:self.resultingUser])
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        else
+            cell.accessoryType = UITableViewCellAccessoryNone;
     }
-    else {
-        cell.accessoryType = UITableViewCellAccessoryNone;
+    else{
+        if ([self isGroupMember:self.resultingQuery])
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        else
+            cell.accessoryType = UITableViewCellAccessoryNone;
     }
     
     return cell;
@@ -184,29 +212,17 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     
     if ([self.groupName isEqualToString:@"Friends"]){
-        PFUser *user = [self.allUsers objectAtIndex:indexPath.row];
-    
         PFRelation *friendsRelation = [[PFUser currentUser] relationForKey:@"friendRelation"];
         
-        if ([self isFriend:user]) {
-            // Remove the checkmark
+        if ([self isFriend:self.resultingUser]) {
             cell.accessoryType = UITableViewCellAccessoryNone;
             
-            // Remove from the array of friends
-            for (PFUser *friend in self.friends) {
-                if ([friend.objectId isEqualToString:user.objectId]) {
-                    [self.friends removeObject:friend];
-                    break;
-                }
-            }
-            
             // Remove from the backend
-            [friendsRelation removeObject:user];
+            [friendsRelation removeObject:self.resultingUser];
         }
         else {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            [self.friends addObject:user];
-            [friendsRelation addObject:user];
+            [friendsRelation addObject:self.resultingUser];
         }
         
         [[PFUser currentUser] saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -216,34 +232,41 @@
         }];
     }
     else {
-        NSString *tempName = [[self.allUsers objectAtIndex:indexPath.row] objectForKey:@"username"];
-        
         if (cell.accessoryType == UITableViewCellAccessoryCheckmark){
             cell.accessoryType = UITableViewCellAccessoryNone;
-            [self.membersToAdd removeObject:tempName];
+            [self removeFromGroup:self.resultingQuery];
         }
         else{
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            [self.membersToAdd addObject:tempName];
+            [self addToGroup:self.resultingQuery];
         }
     }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100;
+    return 60;
 }
 
 #pragma mark - Helper Method
 
 -(BOOL)isFriend:(PFUser *)user
 {
-    for (PFUser *friend in self.friends) {
+    for (PFUser *friend in self.members) {
         if ([friend.objectId isEqualToString:user.objectId]) {
             return YES;
         }
     }
     
+    return NO;
+}
+
+-(BOOL)isGroupMember:(NSString *)username
+{
+    for (NSString *groupMember in self.members){
+        if ([groupMember isEqualToString:username])
+            return YES;
+    }
     return NO;
 }
 

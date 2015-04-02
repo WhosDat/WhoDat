@@ -95,6 +95,7 @@
         PFQuery *groupQuery = [PFQuery queryWithClassName:@"Group"];
         [groupQuery whereKey:@"Name" equalTo:self.groupName];
         [groupQuery whereKey:@"Members" containsAllObjectsInArray:initialArray];
+        [groupQuery orderByAscending:@"Members"];
         [groupQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             NSArray *tempArray = objects;
             NSMutableArray *groupMembersMutable = [[NSMutableArray alloc] initWithArray:[[tempArray objectAtIndex:0] objectForKey:@"Members"]];
